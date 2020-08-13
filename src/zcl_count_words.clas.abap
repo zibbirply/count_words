@@ -4,10 +4,9 @@ CLASS zcl_count_words DEFINITION
   CREATE PUBLIC .
 
 PUBLIC SECTION.
-  METHODS input_sentence
+  METHODS count_words
     IMPORTING
-      iv_sentence TYPE string.
-  METHODS output_count
+      iv_sentence TYPE string
     RETURNING
       VALUE(rv_count) TYPE i.
 PROTECTED SECTION.
@@ -22,19 +21,14 @@ ENDCLASS.
 
 CLASS zcl_count_words IMPLEMENTATION.
 
-  METHOD input_sentence.
+  METHOD count_words.
 
     gv_sentence = iv_sentence.
     me->calculate_count(  ).
-
-  ENDMETHOD.
-
-
-  METHOD output_count.
-
     rv_count = gv_count.
 
   ENDMETHOD.
+
 
   METHOD calculate_count.
 

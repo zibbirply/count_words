@@ -26,28 +26,25 @@ CLASS ltcl_count_words IMPLEMENTATION.
   METHOD test_output.
     cl_abap_unit_assert=>assert_equals( msg = 'Initialize input of sentence and output of count'
                                         exp = 0
-                                        act = cut->output_count(  ) ).
+                                        act = cut->count_words( '' ) ).
   ENDMETHOD.
 
   METHOD input_hello_darling_output_2.
-    cut->input_sentence( 'hello darling' ).
     cl_abap_unit_assert=>assert_equals( msg = 'Do the first test of input-output relation'
                                         exp = 2
-                                        act = cut->output_count(  ) ).
+                                        act = cut->count_words( 'hello darling' ) ).
   ENDMETHOD.
 
   METHOD input_fcfs_count_4.
-    cut->input_sentence( 'first come first served' ).
     cl_abap_unit_assert=>assert_equals( msg = 'second test'
                                         exp = 4
-                                        act = cut->output_count(  ) ).
+                                        act = cut->count_words( 'first come first served' ) ).
   ENDMETHOD.
 
   METHOD unnecessary_spaces.
-    cut->input_sentence( ' this is unnecessary ' ).
     cl_abap_unit_assert=>assert_equals( msg = 'unnecessary spaces at the beginning and ending of the sentence'
                                         exp = 3
-                                        act = cut->output_count(  ) ).
+                                        act = cut->count_words( ' this is unnecessary ' ) ).
   ENDMETHOD.
 
 
