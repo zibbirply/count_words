@@ -40,9 +40,7 @@ CLASS zcl_count_words IMPLEMENTATION.
 
     DATA: lt_letters TYPE char1.
 
-*       gv_count = 1 + count_any_of( val = gv_sentence sub = ' ' ).
-      FIND ALL OCCURRENCES OF ' ' IN gv_sentence RESULTS DATA(gt_count).
-      gv_count = 1 + lines( gt_count ).
+       gv_count = 1 + count_any_of( val = gv_sentence sub = | | ).
 
   ENDMETHOD.
 
