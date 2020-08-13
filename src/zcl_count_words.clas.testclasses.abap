@@ -9,7 +9,9 @@ CLASS ltcl_count_words DEFINITION FINAL FOR TESTING
     METHODS:
       setup,
       test_output FOR TESTING RAISING cx_static_check,
-      input_hello_darling_output_2 FOR TESTING RAISING cx_static_check.
+      input_hello_darling_output_2 FOR TESTING RAISING cx_static_check,
+      input_fcfs_count_4 FOR TESTING RAISING cx_static_check,
+      unnecessary_spaces FOR TESTING RAISING cx_static_check.
 ENDCLASS.
 
 
@@ -31,6 +33,20 @@ CLASS ltcl_count_words IMPLEMENTATION.
     cut->input_sentence( 'hello darling' ).
     cl_abap_unit_assert=>assert_equals( msg = 'Do the first test of input-output relation'
                                         exp = 2
+                                        act = cut->output_count(  ) ).
+  ENDMETHOD.
+
+  METHOD input_fcfs_count_4.
+    cut->input_sentence( 'first come first served' ).
+    cl_abap_unit_assert=>assert_equals( msg = 'second test'
+                                        exp = 4
+                                        act = cut->output_count(  ) ).
+  ENDMETHOD.
+
+  METHOD unnecessary_spaces.
+    cut->input_sentence( ' this is unnecessary ' ).
+    cl_abap_unit_assert=>assert_equals( msg = 'unnecessary spaces at the beginning and ending of the sentence'
+                                        exp = 3
                                         act = cut->output_count(  ) ).
   ENDMETHOD.
 

@@ -9,12 +9,12 @@ PUBLIC SECTION.
       iv_sentence TYPE string.
   METHODS output_count
     RETURNING
-      value(rv_count) TYPE i.
+      VALUE(rv_count) TYPE i.
 PROTECTED SECTION.
 PRIVATE SECTION.
     METHODS calculate_count.
 
-    DATA: gv_sentence type string
+    DATA: gv_sentence TYPE string
           , gv_count TYPE i.
 ENDCLASS.
 
@@ -38,9 +38,42 @@ CLASS zcl_count_words IMPLEMENTATION.
 
   METHOD calculate_count.
 
-    DATA: lt_letters TYPE char1.
+*    gv_count = 1.
+*
+*    REPLACE ALL OCCURRENCES OF '  ' IN gv_sentence WITH ' '.
+*
+*    find FIRST OCCURRENCE OF ' ' IN gv_sentence MATCH OFFSET data(lv_firstspace).
+*
+*    if lv_firstspace = 1.
+*        gv_count -= 1.
+*    ENDIF.
+*
+*       gv_count += count_any_of( val = gv_sentence sub = | | ).
 
-       gv_count = 1 + count_any_of( val = gv_sentence sub = | | ).
+    DATA: lt_letters TYPE TABLE OF string.
+
+    lt_letters = VALUE #(
+      FOR i = 0 UNTIL i >= strlen( gv_sentence ) (
+        gv_sentence+i(1)
+      )
+    ).
+
+    DATA(lv_last_letter_was_space) = abap_true.
+
+    DO strlen( gv_sentence ) TIMES.
+
+        IF lt_letters[ sy-index ] <> | |
+        AND lv_last_letter_was_space = abap_true.
+            gv_count += 1.
+        ENDIF.
+
+        IF lt_letters[ sy-index ] = | |.
+            lv_last_letter_was_space = abap_true.
+        ELSE.
+            lv_last_letter_was_space = abap_false.
+        ENDIF.
+
+    ENDDO.
 
   ENDMETHOD.
 
