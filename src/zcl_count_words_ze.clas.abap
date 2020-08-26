@@ -7,14 +7,18 @@ PUBLIC SECTION.
   METHODS:   count_words
                 IMPORTING   iv_sentence             TYPE string
                             iv_taboo_words          TYPE string
-                RETURNING VALUE(rv_count)           TYPE i.
+                RETURNING VALUE(rv_count)           TYPE i,
+             count_unique_words
+                RETURNING VALUE(rv_unique)          TYPE i
+             .
 
 PROTECTED SECTION.
 
 PRIVATE SECTION.
   METHODS:  check_up_file
                 RETURNING VALUE(rv_taboo_counter)   TYPE i,
-            calculate_count.
+            calculate_count
+            .
 
   DATA: gv_sentence         TYPE string
         , gv_taboo_words    TYPE string
@@ -64,6 +68,33 @@ CLASS zcl_count_words_ze IMPLEMENTATION.
             rv_taboo_counter += 1.
           ENDIF.
       ENDDO.
+
+  ENDMETHOD.
+
+  METHOD count_unique_words.
+    DATA: lv_appearance     TYPE i
+          , lv_actual_word  TYPE string
+          .
+    SPLIT gv_sentence AT ' ' INTO TABLE DATA(lt_check_sentence).
+
+    DO lines( lt_check_sentence ) TIMES.
+
+        CLEAR lv_actual_word.
+        CLEAR lv_appearance.
+        lv_actual_word = lt_check_sentence[ sy-index ].
+
+        DO lines( lt_check_sentence ) TIMES.
+            IF lv_actual_word = lt_check_sentence[ sy-index ].
+            lv_appearance += 1.
+            ENDIF.
+        ENDDO.
+
+        IF lv_appearance = 1.
+            rv_unique += 1.
+        ENDIF.
+
+    ENDDO.
+
 
   ENDMETHOD.
 
