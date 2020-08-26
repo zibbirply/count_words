@@ -3,7 +3,7 @@
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT zcl_input_output_ze.
+REPORT z_input_output_ze.
 
 DATA: cut                   TYPE REF TO zcl_count_words_ze
 
@@ -15,6 +15,7 @@ DATA: cut                   TYPE REF TO zcl_count_words_ze
 
       , lt_read_input_txt   TYPE TABLE OF string
       , lv_input            TYPE string
+      , lt_input            TYPE TABLE OF string
 
       , gt_filetable        TYPE filetable
       , gv_return           TYPE i
@@ -113,13 +114,14 @@ AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_fname.
       error_no_gui            = 3
       not_supported_by_gui    = 4
       OTHERS                  = 5.
-* Read the file name table and move it to the param
+
   READ TABLE gt_filetable INTO DATA(gv_filetable) INDEX 1.
   p_fname = gv_filetable.
 
 START-OF-SELECTION.
 
 IF p_fname IS INITIAL.
+
     cl_demo_input=>request(
         EXPORTING
             text        = |Type a random sentence (dont get too corny):|
@@ -127,6 +129,25 @@ IF p_fname IS INITIAL.
         CHANGING
             field       = lv_input
     ).
+    APPEND lv_input TO lt_input.
+    CLEAR lv_input.
+
+    WHILE p_fname IS INITIAL.
+        cl_demo_input=>request(
+            EXPORTING
+                text        = |Type a random sentence (dont get too corny):|
+                as_checkbox = abap_false
+            CHANGING
+                field       = lv_input
+        ).
+
+        IF lv_input IS INITIAL.
+            EXIT.
+        ELSE.
+            APPEND lv_input TO lt_input.
+            CLEAR lv_input.
+        ENDIF.
+    ENDWHILE.
 
 ELSE.
     CALL METHOD cl_gui_frontend_services=>gui_upload
@@ -167,27 +188,42 @@ ELSE.
 
 ENDIF.
 
-cut->count_words(
-    EXPORTING
-        iv_sentence     = lv_input
-        iv_taboo_words  = lv_taboo_string
-        iv_dict         = lv_dict_string
-    RECEIVING
-        rv_count        = DATA(lv_result)
-).
+LOOP AT lt_input INTO lv_input.
 
-WRITE: / | Input: '{ lv_input }' |.
-WRITE: / | Amount of words: { lv_result } |.
-WRITE: / | Unique: { cut->count_unique_words(  ) } |.
-WRITE: / | Average word length: { cut->count_average_word_length(  ) } |.
+    WRITE: |Input NO. { sy-tabix }|.
 
-IF lt_read_input_txt IS INITIAL.
-    SPLIT lv_input AT | | INTO TABLE lt_read_input_txt.
-ENDIF.
+    cut->count_words(
+        EXPORTING
+            iv_sentence     = lv_input
+            iv_taboo_words  = lv_taboo_string
+            iv_dict         = lv_dict_string
+        RECEIVING
+            rv_count        = DATA(lv_result)
+    ).
 
-SORT lt_read_input_txt.
+    WRITE: / | Input: '{ lv_input }' |.
+    WRITE: / | Amount of words: { lv_result } |.
+    WRITE: / | Unique: { cut->count_unique_words(  ) } |.
+    WRITE: / | Average word length: { cut->count_average_word_length(  ) } |.
 
-WRITE / | Index (Unknown: { cut->check_dict(  ) }): |.
-DO lines( lt_read_input_txt ) TIMES.
-    WRITE: / |   { lt_read_input_txt[ sy-index ] } |.
-ENDDO.
+
+    SPLIT lv_input AT | | INTO TABLE DATA(lt_index).
+
+    SORT lt_index.
+
+    WRITE / | Index (Unknown: { cut->check_dict(  ) }): |.
+    DO lines( lt_index ) TIMES.
+        WRITE: / |   { lt_index[ sy-index ] } |.
+    ENDDO.
+
+    CLEAR lt_index.
+    CLEAR lv_input.
+    CLEAR lv_result.
+
+    SKIP.
+    SKIP.
+    SKIP.
+
+ENDLOOP.
+
+CLEAR lt_input.
