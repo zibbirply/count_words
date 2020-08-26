@@ -132,3 +132,4 @@ cut->count_words(
 
 WRITE: | The amount of words in '{ lv_input }' is: { lv_result } |.
 WRITE: | Unique: { cut->count_unique_words(  ) } |.
+WRITE: | Average word length: { cut->count_average_word_length(  ) } |.

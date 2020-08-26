@@ -9,7 +9,9 @@ PUBLIC SECTION.
                             iv_taboo_words          TYPE string
                 RETURNING VALUE(rv_count)           TYPE i,
              count_unique_words
-                RETURNING VALUE(rv_unique)          TYPE i
+                RETURNING VALUE(rv_unique)          TYPE i,
+             count_average_word_length
+                RETURNING VALUE(rv_average)         TYPE string
              .
 
 PROTECTED SECTION.
@@ -72,6 +74,7 @@ CLASS zcl_count_words_ze IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD count_unique_words.
+
     DATA: lv_appearance     TYPE i
           , lv_actual_word  TYPE string
           .
@@ -95,6 +98,20 @@ CLASS zcl_count_words_ze IMPLEMENTATION.
 
     ENDDO.
 
+
+  ENDMETHOD.
+
+  METHOD count_average_word_length.
+
+        DATA: lv_average    TYPE p length 16 decimals 2.
+
+    SPLIT gv_sentence AT ' ' INTO TABLE DATA(lt_check_sentence).
+
+    DO lines( lt_check_sentence ) TIMES.
+        lv_average += strlen( lt_check_sentence[ sy-index ] ).
+    ENDDO.
+
+    rv_average = lv_average / lines( lt_check_sentence ).
 
   ENDMETHOD.
 
