@@ -28,7 +28,6 @@ CLASS ltcl_count_words IMPLEMENTATION.
     cut->count_words(
         EXPORTING
             iv_sentence     = ''
-            iv_taboo_words  = |the a on off|
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
@@ -41,7 +40,6 @@ CLASS ltcl_count_words IMPLEMENTATION.
     cut->count_words(
         EXPORTING
             iv_sentence     = 'hello darling'
-            iv_taboo_words  = |the a on off|
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
@@ -54,7 +52,6 @@ CLASS ltcl_count_words IMPLEMENTATION.
     cut->count_words(
         EXPORTING
             iv_sentence     = 'first come first served'
-            iv_taboo_words  = |the a on off|
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
@@ -67,7 +64,6 @@ CLASS ltcl_count_words IMPLEMENTATION.
     cut->count_words(
         EXPORTING
             iv_sentence     = ' this is unnecessary '
-            iv_taboo_words  = |the a on off|
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
