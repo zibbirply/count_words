@@ -95,9 +95,10 @@ CLASS zcl_count_words_ze IMPLEMENTATION.
 
   METHOD check_dict.
 
-      SPLIT gv_taboo_words AT ' ' INTO TABLE DATA(lt_dict).
+      SPLIT gv_dict AT ' ' INTO TABLE DATA(lt_dict).
 
       rv_dict_counter = lines( gt_sentence ).
+
       DO lines( gt_sentence ) TIMES.
           FIND FIRST OCCURRENCE OF gt_sentence[ sy-index ] IN TABLE lt_dict.
           IF sy-subrc = 0.
