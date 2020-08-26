@@ -130,6 +130,18 @@ cut->count_words(
         rv_count        = DATA(lv_result)
 ).
 
-WRITE: | The amount of words in '{ lv_input }' is: { lv_result } |.
-WRITE: | Unique: { cut->count_unique_words(  ) } |.
-WRITE: | Average word length: { cut->count_average_word_length(  ) } |.
+WRITE: / | Input: '{ lv_input }' |.
+WRITE: / | Amount of words: { lv_result } |.
+WRITE: / | Unique: { cut->count_unique_words(  ) } |.
+WRITE: / | Average word length: { cut->count_average_word_length(  ) } |.
+
+IF lt_read_input_txt IS INITIAL.
+    SPLIT lv_input AT | | INTO TABLE lt_read_input_txt.
+ENDIF.
+
+SORT lt_read_input_txt.
+
+WRITE / | Index: |.
+DO lines( lt_read_input_txt ) TIMES.
+    WRITE: / |   { lt_read_input_txt[ sy-index ] } |.
+ENDDO.
