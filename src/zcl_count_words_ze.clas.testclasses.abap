@@ -32,9 +32,9 @@ CLASS ltcl_count_words IMPLEMENTATION.
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
-        cl_abap_unit_assert=>assert_equals( msg = 'Initialize input of sentence and output of count'
-                                            exp = 0
-                                            act = lv_result ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Initialize input of sentence and output of count'
+                                        exp = 0
+                                        act = lv_result ).
   ENDMETHOD.
 
   METHOD iteration1_input_hello_darling.
@@ -45,9 +45,9 @@ CLASS ltcl_count_words IMPLEMENTATION.
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
-        cl_abap_unit_assert=>assert_equals( msg = 'Do the first test of input-output relation'
-                                            exp = 2
-                                            act = lv_result ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Do the first test of input-output relation'
+                                        exp = 2
+                                        act = lv_result ).
   ENDMETHOD.
 
   METHOD iteration1_input_fcfs.
@@ -58,9 +58,9 @@ CLASS ltcl_count_words IMPLEMENTATION.
         RECEIVING
             rv_count        = DATA(lv_result)
         ).
-        cl_abap_unit_assert=>assert_equals( msg = 'second test'
-                                            exp = 4
-                                            act = lv_result ).
+    cl_abap_unit_assert=>assert_equals( msg = 'second test'
+                                        exp = 4
+                                        act = lv_result ).
   ENDMETHOD.
 
   METHOD iteration1_unnecessary_spaces.
@@ -88,7 +88,5 @@ CLASS ltcl_count_words IMPLEMENTATION.
                                         exp = 10
                                         act = lv_result ).
   ENDMETHOD.
-
-
 
 ENDCLASS.
